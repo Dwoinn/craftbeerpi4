@@ -37,3 +37,28 @@ For a more detailed description of a development setup without the _development 
 Thanks to all the people who have contributed
 
 [![contributors](https://contributors-img.web.app/image?repo=avollkopf/craftbeerpi4)](https://github.com/avollkopf/craftbeerpi4/graphs/contributors)
+
+## Install on Radxa Rock3
+### Enable One Wire GPIO (DS18b20 sensors)
+```bash
+echo dtoverlay=$(ls /boot/dtbs/$(uname -r)/rockchip/overlay/*w1-gpio* | sed -e 's/\.dtbo$//' | xargs -n 1 basename) | sudo tee -a /boot/config.txt > /dev/null
+sudo /usr/local/sbin/update_extlinux.sh
+sudo reboot
+```
+
+Test by listing one wire devices :
+```bash
+sudo modprobe w1-gpio
+sudo modprobe w1-therm
+ls /sys/bus/w1/devices
+```
+
+### Enable PWM 
+
+### Prereq
+```bash
+sudo apt install python3.9 python3.9-dev python3.9-distutils
+curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python3.9
+sudo ln -s /usr/local/lib/python3.8/dist-packages/mraa.py /usr/local/lib/python3.9/dist-packages/mraa.py
+sudo ln -s /usr/local/lib/python3.8/dist-packages/_mraa.so /usr/local/lib/python3.9/dist-packages/_mraa.so
+```
